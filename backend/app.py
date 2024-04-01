@@ -7,9 +7,11 @@ from flask_bcrypt import Bcrypt
 from sqlite3 import IntegrityError
 from sqlalchemy import exc 
 from models import db,Match,Player,Team,User,Comment
+import pandas as pd
 from nba_api.stats.static import teams
-from nba_api.stats.endpoints import teamgamelog, playergamelog
+from nba_api.stats.endpoints import teamgamelog, playergamelog,leaguegamefinder
 from nba_api.live.nba.endpoints import boxscore
+
 
 import json
 
@@ -44,26 +46,6 @@ def get_team_stats():
 
     return jsonify(team_stats)
 
-# @app.route('/player-averages/<player_id>')
-# def get_player_averages(player_id):
-#     # Instantiate the endpoint and fetch the data
-#     player_log = playergamelog.PlayerGameLog(player_id=player_id)
-#     player_stats = player_log.get_normalized_dict()
-
-#     # Calculate player averages
-#     total_games = len(player_stats['data'])
-#     total_points = sum(float(game['PTS']) for game in player_stats['data'])
-#     total_assists = sum(float(game['AST']) for game in player_stats['data'])
-#     total_rebounds = sum(float(game['REB']) for game in player_stats['data'])
-
-#     player_averages = {
-#         'total_games': total_games,
-#         'average_points': total_points / total_games,
-#         'average_assists': total_assists / total_games,
-#         'average_rebounds': total_rebounds / total_games
-#     }
-
-#     return jsonify(player_averages)
 
 @app.route('/boxscore/<game_id>')
 def get_boxscore(game_id):
@@ -78,6 +60,19 @@ def get_boxscore(game_id):
         return jsonify(box_score_data)
     else:
         return jsonify({'error': 'Box score data not found'})
+    
+@app.route('/team-games/<team_abbreviation>')
+def get_team_games(team_abbreviation):
+    nba_teams = teams.get_teams()
+    # Select the dictionary for the Celtics, which contains their team ID
+    team = [team for team in nba_teams if team['abbreviation'] == team_abbreviation][0]
+    team_id = team['id']
+    # Query for games where the Celtics were playing
+    gamefinder = leaguegamefinder.LeagueGameFinder(team_id_nullable=team_id)
+# The first DataFrame of those returned is what we want.
+    games = gamefinder.get_data_frames()[0]
+    games_json = games.to_json(orient='records')
+    return jsonify(games_json)
 
 # @app.get('/check_session')
 # def check_session():
