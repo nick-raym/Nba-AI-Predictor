@@ -8,6 +8,8 @@ from sqlite3 import IntegrityError
 from sqlalchemy import exc 
 from models import db,Match,Player,Team,User,Comment
 from nba_api.stats.static import teams
+from nba_api.stats.endpoints import teamgamelog, playergamelog
+from nba_api.live.nba.endpoints import boxscore
 
 import json
 
@@ -22,7 +24,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
 bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
-
+# points a player would score vs a certain team
+# 
 db.init_app(app)
 
 @app.route('/teams')
@@ -30,7 +33,51 @@ def get_teams():
     nba_teams = teams.get_teams()
     return jsonify(nba_teams)
 
+@app.route('/team-stats')
+def get_team_stats():
+    # Specify the team ID for the team you want to retrieve stats for
+    team_id = 1610612737  # Atlanta Hawks as an example
+    
+    # Instantiate the endpoint and fetch the data
+    team_log = teamgamelog.TeamGameLog(team_id=team_id)
+    team_stats = team_log.get_normalized_dict()
 
+    return jsonify(team_stats)
+
+# @app.route('/player-averages/<player_id>')
+# def get_player_averages(player_id):
+#     # Instantiate the endpoint and fetch the data
+#     player_log = playergamelog.PlayerGameLog(player_id=player_id)
+#     player_stats = player_log.get_normalized_dict()
+
+#     # Calculate player averages
+#     total_games = len(player_stats['data'])
+#     total_points = sum(float(game['PTS']) for game in player_stats['data'])
+#     total_assists = sum(float(game['AST']) for game in player_stats['data'])
+#     total_rebounds = sum(float(game['REB']) for game in player_stats['data'])
+
+#     player_averages = {
+#         'total_games': total_games,
+#         'average_points': total_points / total_games,
+#         'average_assists': total_assists / total_games,
+#         'average_rebounds': total_rebounds / total_games
+#     }
+
+#     return jsonify(player_averages)
+
+@app.route('/boxscore/<game_id>')
+def get_boxscore(game_id):
+    # Instantiate the BoxScore endpoint with the specified game ID
+    box = boxscore.BoxScore(game_id)
+    
+    # Fetch the box score data
+    box_score_data = box.get_dict()
+    
+    # Check if the data is available
+    if box_score_data:
+        return jsonify(box_score_data)
+    else:
+        return jsonify({'error': 'Box score data not found'})
 
 # @app.get('/check_session')
 # def check_session():

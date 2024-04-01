@@ -28,6 +28,7 @@ class Team(db.Model, SerializerMixin):
     __tablename__ = "event_table"
     serialize_rules= ['-event_matches.event']
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
 
 
 class Match(db.Model, SerializerMixin):
