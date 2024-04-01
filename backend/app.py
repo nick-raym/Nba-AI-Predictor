@@ -13,6 +13,7 @@ from nba_api.stats.endpoints import teamgamelog, playergamelog,leaguegamefinder
 from nba_api.live.nba.endpoints import boxscore
 
 
+
 import json
 
 config = dotenv_values(".env")
@@ -64,15 +65,37 @@ def get_boxscore(game_id):
 @app.route('/team-games/<team_abbreviation>')
 def get_team_games(team_abbreviation):
     nba_teams = teams.get_teams()
-    # Select the dictionary for the Celtics, which contains their team ID
+
     team = [team for team in nba_teams if team['abbreviation'] == team_abbreviation][0]
     team_id = team['id']
-    # Query for games where the Celtics were playing
+    
     gamefinder = leaguegamefinder.LeagueGameFinder(team_id_nullable=team_id)
-# The first DataFrame of those returned is what we want.
+    # The first DataFrame of those returned is what we want.
     games = gamefinder.get_data_frames()[0]
     games_json = games.to_json(orient='records')
     return jsonify(games_json)
+
+@app.route('/player-point-averages/<player_id>/<team_abbreviation>')
+def get_player_point_averages(player_id, team_abbreviation):
+    # Get the dictionary for the specified team abbreviation
+    nba_teams = teams.get_teams()
+    team = [team for team in nba_teams if team['abbreviation'] == team_abbreviation][0]
+    team_id = team['id']
+    
+    # Query for the player's game logs
+    player_log = playergamelog.PlayerGameLog(player_id=player_id)
+    player_stats = player_log.get_data_frames()[0]
+    
+    # Filter game logs to include only games against the specified team
+    games_against_team = player_stats[player_stats['MATCHUP'].str.contains(team_abbreviation)]
+    
+    # Calculate point averages for those games
+    total_points = games_against_team['PTS'].astype(float).sum()
+    total_games = len(games_against_team)
+    point_average = total_points / total_games if total_games > 0 else 0
+    
+    # Return point average as JSON
+    return jsonify({'player_id': player_id, 'team_abbreviation': team_abbreviation, 'point_average': point_average})
 
 # @app.get('/check_session')
 # def check_session():
