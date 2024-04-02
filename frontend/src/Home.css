@@ -1,0 +1,40 @@
+.container {
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100vh;
+    /* Set height to 100% of viewport height */
+    box-sizing: border-box;
+    
+}
+
+.header {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #333;
+    color: #fff;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+.section h2 {
+    margin-bottom: 20px;
+}
+
+.section p {
+    line-height: 1.6;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: #fff;
+}

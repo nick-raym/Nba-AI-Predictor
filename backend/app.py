@@ -72,6 +72,7 @@ def get_team_games(team_abbreviation):
     gamefinder = leaguegamefinder.LeagueGameFinder(team_id_nullable=team_id)
     # The first DataFrame of those returned is what we want.
     games = gamefinder.get_data_frames()[0]
+    print(games.head())
     games_json = games.to_json(orient='records')
     return jsonify(games_json)
 
@@ -85,7 +86,7 @@ def get_player_point_averages(player_id, team_abbreviation):
     # Query for the player's game logs
     player_log = playergamelog.PlayerGameLog(player_id=player_id)
     player_stats = player_log.get_data_frames()[0]
-    
+    print(player_stats.head())
     # Filter game logs to include only games against the specified team
     games_against_team = player_stats[player_stats['MATCHUP'].str.contains(team_abbreviation)]
     
