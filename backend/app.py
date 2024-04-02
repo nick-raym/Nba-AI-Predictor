@@ -73,6 +73,12 @@ def get_team_games(team_abbreviation):
     # The first DataFrame of those returned is what we want.
     games = gamefinder.get_data_frames()[0]
     print(games.head())
+    print(" ")
+    print(games.SEASON_ID)
+    print(" ")
+    print(games.GAME_DATE)
+    print(" ")
+    print(games.MATCHUP)
     games_json = games.to_json(orient='records')
     return jsonify(games_json)
 
