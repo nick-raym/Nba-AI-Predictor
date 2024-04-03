@@ -13,6 +13,9 @@ from nba_api.stats.endpoints import teamgamelog, playergamelog,leaguegamefinder
 from nba_api.live.nba.endpoints import boxscore
 from nba_api.stats.endpoints import boxscoretraditionalv2
 from nba_api.stats.static import players
+from nba_api.stats.endpoints import commonplayerinfo
+from nba_api.stats.endpoints import playerfantasyprofile
+
 
 
 
@@ -47,7 +50,60 @@ def get_players():
     except Exception as e:
         # Handle errors
         return jsonify({'error': str(e)}), 500
+    
 
+# 203507 giannis id
+@app.route('/player-stats/<player_id>/<start>/<end>')
+def get_player_stats_multiple_seasons(player_id,start,end):
+    print(start)
+    print(end)
+    try:
+        # Get player stats for each season
+        player_stats = {}
+        for season in range(int(start), int(end)+1):  # Change the range as needed
+            gamelog = playergamelog.PlayerGameLog(player_id=player_id, season=season)
+            gamelog_data = gamelog.get_data_frames()
+            player_stats[str(season)] = gamelog_data[0].to_dict(orient='records')
+        
+        # Return player stats as JSON
+        return jsonify(player_stats)
+    except Exception as e:
+        # Handle errors
+        print(e)
+        return jsonify({'error': str(e)}), 500
+
+
+
+# 203507 Giannis ID
+@app.route('/player-info/<player_id>')
+def get_player_info(player_id):
+    try:
+        # Get player information
+        player_info = commonplayerinfo.CommonPlayerInfo(player_id=player_id)
+        player_info_data = player_info.get_data_frames()[0].to_dict(orient='records')
+
+        # Return player information as JSON
+        return jsonify(player_info_data)
+    except Exception as e:
+        # Handle errors
+        print(e)
+        return jsonify({'error': str(e)}), 500
+
+# 203507 Giannis ID
+@app.route('/player-fantasy-info/<player_id>')
+def get_player_fantasy_info(player_id):
+    try:
+        # Fetch player fantasy profile data
+        fantasy_profile = playerfantasyprofile.PlayerFantasyProfile(player_id=player_id)
+        fantasy_profile_data = fantasy_profile.get_normalized_dict()
+
+        # Return fantasy profile data as JSON
+        return jsonify(fantasy_profile_data)
+    except Exception as e:
+        # Handle errors
+        return jsonify({'error': str(e)}), 500
+
+# NYK
 @app.route('/team-stats')
 def get_team_stats():
     # Specify the team ID for the team you want to retrieve stats for
@@ -94,6 +150,7 @@ def get_team_games(team_abbreviation):
     games_json = games.to_json(orient='records')
     return jsonify(games_json)
 
+# 203507/GSW
 @app.route('/player-point-averages/<player_id>/<team_abbreviation>')
 def get_player_point_averages_vs_team(player_id, team_abbreviation):
     # Get the dictionary for the specified team abbreviation
@@ -115,6 +172,13 @@ def get_player_point_averages_vs_team(player_id, team_abbreviation):
     
     # Return point average as JSON
     return jsonify({'player_id': player_id, 'team_abbreviation': team_abbreviation, 'point_average': point_average})
+
+
+
+
+
+
+
 
 # @app.get('/check_session')
 # def check_session():

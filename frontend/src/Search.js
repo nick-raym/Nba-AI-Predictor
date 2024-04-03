@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import './Search.css'
+import { Link } from "react-router-dom";
 
 export default function Search() {
     const [players, setPlayers] = useState([]);
@@ -16,17 +17,18 @@ export default function Search() {
             .catch(error => {
                 console.error('Error fetching players:', error);
             });
-        
+
     }, []);
-    
+
 
     const handleSearch = (event) => {
-        const searchTerm = event.target.value.toLowerCase(); 
+        const searchTerm = event.target.value.toLowerCase();
         setPlayerSearch(searchTerm);
-        
+
         const filtered = players.filter(player => player.full_name.toLowerCase().includes(searchTerm));
-        setFilteredPlayers(filtered.slice(0, 10));}
-    
+        setFilteredPlayers(filtered.slice(0, 10));
+    }
+
 
     return (
         <div className="search-container">
@@ -39,7 +41,9 @@ export default function Search() {
             />
             <ul className="search-results">
                 {filteredPlayers.map(player => (
-                    <li key={player.id}>{player.full_name}</li>
+                    <Link to={`/player-page/${player.id}`} key={player.id}>
+                        <li>{player.full_name}</li>
+                    </Link>
                 ))}
             </ul>
         </div>

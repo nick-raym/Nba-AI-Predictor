@@ -7,6 +7,7 @@ import Home from './Home';
 import './App.css';
 import Predictions from './Predictions';
 import Search from './Search';
+import PlayerPage from './PlayerPage';
 
 
 const router = createBrowserRouter([
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/search",
         element: <Search />
+      },
+      {
+        path: "/player-page/:playerId",
+        element: <PlayerPage />
       },
     ]
   }
