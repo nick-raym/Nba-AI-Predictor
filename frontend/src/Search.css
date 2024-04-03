@@ -1,0 +1,38 @@
+/* Search.css */
+
+.search-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.search-bar {
+    width: 300px;
+    height: 40px;
+    font-size: 16px;
+    padding: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-results {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    
+}
+
+.search-results li {
+    font-size: 18px;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 4px;
+    margin-right: 10%;
+    margin-left: 10%;
+    
+}
+
+.search-results li:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}

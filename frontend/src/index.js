@@ -6,6 +6,7 @@ import Home from './Home';
 
 import './App.css';
 import Predictions from './Predictions';
+import Search from './Search';
 
 
 const router = createBrowserRouter([
@@ -15,13 +16,21 @@ const router = createBrowserRouter([
     // errorElement: <Error />,
     children: [
       {
+        path: "/",
+        element: <Home />
+      },
+      {
         path: "/home",
         element: <Home />
       },
       {
         path: "/predictions",
         element: <Predictions />
-      }
+      },
+      {
+        path: "/search",
+        element: <Search />
+      },
     ]
   }
 ])

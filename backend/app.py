@@ -11,6 +11,8 @@ import pandas as pd
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import teamgamelog, playergamelog,leaguegamefinder
 from nba_api.live.nba.endpoints import boxscore
+from nba_api.stats.endpoints import boxscoretraditionalv2
+from nba_api.stats.static import players
 
 
 
@@ -36,6 +38,16 @@ def get_teams():
     nba_teams = teams.get_teams()
     return jsonify(nba_teams)
 
+@app.route('/players')
+def get_players():
+    try:
+        nba_players = players.get_players()
+        
+        return jsonify(nba_players)
+    except Exception as e:
+        # Handle errors
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/team-stats')
 def get_team_stats():
     # Specify the team ID for the team you want to retrieve stats for
@@ -47,7 +59,7 @@ def get_team_stats():
 
     return jsonify(team_stats)
 
-
+# 0022000196 GAME ID
 @app.route('/boxscore/<game_id>')
 def get_boxscore(game_id):
     # Instantiate the BoxScore endpoint with the specified game ID
@@ -83,7 +95,7 @@ def get_team_games(team_abbreviation):
     return jsonify(games_json)
 
 @app.route('/player-point-averages/<player_id>/<team_abbreviation>')
-def get_player_point_averages(player_id, team_abbreviation):
+def get_player_point_averages_vs_team(player_id, team_abbreviation):
     # Get the dictionary for the specified team abbreviation
     nba_teams = teams.get_teams()
     team = [team for team in nba_teams if team['abbreviation'] == team_abbreviation][0]
