@@ -50,3 +50,4 @@ export default function Seasons({ season, startDate }) {
         </div>
     );
 }
+

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./PlayerPage.css";
 import Seasons from "./Seasons.js";
+import FantasyStatsPicker from "./FantasyStats.js";
 
 export default function PlayerPage() {
     const { playerId } = useParams();
@@ -39,6 +40,7 @@ export default function PlayerPage() {
     }, [player, playerId]);
 
     return (
+        <div>
         <div className="player-container">
             <h1>{player.DISPLAY_FIRST_LAST}</h1>
             <div className="player-info">
@@ -53,12 +55,17 @@ export default function PlayerPage() {
                 <p><strong>Last Affiliation:</strong> {player.LAST_AFFILIATION}</p>
                 {/* Add more relevant player information here */}
             </div>
-            <div className="seasons">
+            <div className="fantasy-stats-container">
+                <FantasyStatsPicker />
+            </div>
+            
+        </div>
+        <div className="seasons">
                 {/* Pass start year as prop to Seasons component */}
                 {seasons.map((season, index) => (
                     <Seasons key={index} season={season} startDate={seasonNum + index} />
                 ))}
-            </div>
+        </div>
         </div>
     );
 }
