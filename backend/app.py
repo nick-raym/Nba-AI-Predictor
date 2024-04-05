@@ -15,7 +15,8 @@ from nba_api.stats.endpoints import boxscoretraditionalv2
 from nba_api.stats.static import players
 from nba_api.stats.endpoints import commonplayerinfo
 from nba_api.stats.endpoints import playerfantasyprofile
-
+from nba_api.stats.endpoints import commonteamroster
+from nba_api.stats.endpoints import TeamYearByYearStats
 
 
 
@@ -63,6 +64,7 @@ def get_player_stats_multiple_seasons(player_id,start,end):
         for season in range(int(start), int(end)+1):  # Change the range as needed
             gamelog = playergamelog.PlayerGameLog(player_id=player_id, season=season)
             gamelog_data = gamelog.get_data_frames()
+            
             player_stats[str(season)] = gamelog_data[0].to_dict(orient='records')
         
         # Return player stats as JSON
@@ -114,6 +116,26 @@ def get_team_stats():
     team_stats = team_log.get_normalized_dict()
 
     return jsonify(team_stats)
+
+@app.route('/team-roster/<team_abbreviation>')
+def get_team_roster(team_abbreviation):
+    
+    try:
+        # Get the dictionary for the specified team abbreviation
+        nba_teams = teams.get_teams()
+        team = [team for team in nba_teams if team['abbreviation'] == team_abbreviation][0]
+        team_id = team['id']
+
+        # Query for the team's roster
+        roster = commonteamroster.CommonTeamRoster(team_id=team_id)
+        roster_data = roster.get_data_frames()[0]
+
+        # Return the roster data as JSON
+        # print(roster_data.to_json(orient='records'))
+        return roster_data.to_json(orient='records')
+    except Exception as e:
+        # Handle errors
+        return jsonify({'error': str(e)}), 500
 
 # 0022000196 GAME ID
 @app.route('/boxscore/<game_id>')
@@ -173,8 +195,19 @@ def get_player_point_averages_vs_team(player_id, team_abbreviation):
     # Return point average as JSON
     return jsonify({'player_id': player_id, 'team_abbreviation': team_abbreviation, 'point_average': point_average})
 
-
-
+# print(teams.get_teams())
+@app.route('/year-by-year-stats/<team_id>')
+def get_team_year_by_year_stats(team_id):
+    team_stats = TeamYearByYearStats(team_id=team_id)
+    
+    team_stats_df = team_stats.get_data_frames()[0]
+    
+    # Replace NaN values with a default value, such as None
+    team_stats_df = team_stats_df.fillna('')
+    
+    tm_stats_json = team_stats_df.to_dict(orient='records')
+    
+    return jsonify(tm_stats_json)
 
 
 

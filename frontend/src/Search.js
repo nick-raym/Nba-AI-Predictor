@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import './Search.css'
 import { Link } from "react-router-dom";
 
-export default function Search() {
+export default function Search({ page = true, predictionPlayer,setPredictionPlayer }) {
     const [players, setPlayers] = useState([]);
     const [playerSearch, setPlayerSearch] = useState('');
     const [filteredPlayers, setFilteredPlayers] = useState([]);
@@ -29,6 +29,12 @@ export default function Search() {
         setFilteredPlayers(filtered.slice(0, 10));
     }
 
+    const handlePlayerPrediction = (p) => {
+        setPredictionPlayer(p)
+        console.log(p)
+    }
+
+
 
     return (
         <div className="search-container">
@@ -40,10 +46,15 @@ export default function Search() {
                 className="search-bar"
             />
             <ul className="search-results">
-                {filteredPlayers.map(player => (
+                {page ? filteredPlayers.map(player => (
                     <Link to={`/player-page/${player.id}`} key={player.id}>
                         <li>{player.full_name}</li>
                     </Link>
+                ))
+                    :
+                
+                filteredPlayers.map(player => (
+                    <li key={player.id} onClick={() => handlePlayerPrediction(player)} >{player.full_name}</li>
                 ))}
             </ul>
         </div>

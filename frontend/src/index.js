@@ -8,6 +8,8 @@ import './App.css';
 import Predictions from './Predictions';
 import Search from './Search';
 import PlayerPage from './PlayerPage';
+import TeamSearch from './TeamSearch';
+import TeamPage from './TeamPage';
 
 
 const router = createBrowserRouter([
@@ -36,6 +38,15 @@ const router = createBrowserRouter([
         path: "/player-page/:playerId",
         element: <PlayerPage />
       },
+      {
+        path: "/team-search",
+        element: <TeamSearch />
+      },
+      {
+        path: "/team-page/:teamAbbreviation/:teamId",
+        element: <TeamPage />
+      }
+      
     ]
   }
 ])

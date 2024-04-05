@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./PlayerPage.css";
 import Seasons from "./Seasons.js";
 
@@ -47,7 +47,7 @@ export default function PlayerPage() {
                 <p><strong>Height:</strong> {player.HEIGHT}</p>
                 <p><strong>Weight:</strong> {player.WEIGHT}</p>
                 <p><strong>Position:</strong> {player.POSITION}</p>
-                <p><strong>Team:</strong> {player.TEAM_NAME}</p>
+                <p><strong>Team:</strong> <Link to={`/team-page/${player.TEAM_ABBREVIATION}/${player.TEAM_ID}`}>{player.TEAM_NAME}</Link></p>
                 <p><strong>Jersey:</strong> {player.JERSEY}</p>
                 <p><strong>Seasons of Experience:</strong> {player.SEASON_EXP}</p>
                 <p><strong>Last Affiliation:</strong> {player.LAST_AFFILIATION}</p>

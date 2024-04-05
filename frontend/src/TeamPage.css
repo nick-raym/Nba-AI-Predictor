@@ -1,0 +1,77 @@
+.team-container {
+    max-width: 400px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.team-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.roster-header {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.roster {
+    margin-top: 20px;
+}
+
+.roster ul {
+    list-style-type: none;
+    padding: 0;
+
+}
+
+.roster li:link {
+    text-decoration: none;
+}
+
+.roster li {
+    width: 500px;
+    font-size: 16px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+
+li:hover {
+    background-color: #f0f0f0;
+    /* Light grey background on hover */
+}
+
+.selected {
+    color: #fff;
+    /* White text for selected player */
+}
+
+.yearly-stats {
+    margin-top: 20px;
+}
+
+.yearly-stats h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.yearly-stats ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.yearly-stats li {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.yearly-stats li p {
+    margin: 0;
+    font-size: 16px;
+}

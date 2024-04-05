@@ -22,6 +22,9 @@ export default function Navbar() {
                 <li className="nav-item">
                     <Link to="/search" className="nav-link">Search</Link>
                 </li>
+                <li className="nav-item">
+                    <Link to="/team-search" className="nav-link">Teams</Link>
+                </li>
 
             </ul>
         </nav>
