@@ -60,7 +60,7 @@ export default function Predictions() {
                         <option value="Prediction 3">Predict ...</option>
                     </select>
                 ) : null}
-                {selected2ndPlayerPrediction && selectedPrediction === "Prediction 1" ? <TeamSearch /> : null}
+                {selected2ndPlayerPrediction && selectedPrediction === "Prediction 1" ? <TeamSearch page={false} /> : null}
             </form>
             <Link to="/home">Home</Link>
         </div>

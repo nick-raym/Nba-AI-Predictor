@@ -17,7 +17,9 @@ from nba_api.stats.endpoints import commonplayerinfo
 from nba_api.stats.endpoints import playerfantasyprofile
 from nba_api.stats.endpoints import commonteamroster
 from nba_api.stats.endpoints import TeamYearByYearStats
-
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
 
 
 import json
@@ -36,6 +38,78 @@ migrate = Migrate(app, db)
 # points a player would score vs a certain team
 # 
 db.init_app(app)
+
+
+#put the data frames here
+
+teams_df = pd.DataFrame(teams.get_teams())
+players_df = pd.DataFrame(players.get_players())
+Lebron_id=2544
+player_fantasy_data = playerfantasyprofile.PlayerFantasyProfile(player_id=Lebron_id)
+player_fantasy_data = player_fantasy_data.get_data_frames()
+last_5_games=player_fantasy_data[2]
+vs_opp_stats=player_fantasy_data[4]
+print(vs_opp_stats)
+# Concatenate the list of DataFrames into a single DataFrame
+# fantasy_stats_df = pd.concat(player_fantasy_data)
+# fantasy_stats_df = fantasy_stats_df[2]
+last_5_games_stats = last_5_games[last_5_games['GROUP_VALUE'] == 'Last 5 Games']
+print(last_5_games_stats)
+# print(fantasy_stats_df.head())
+# print(player_fantasy_data[2].head())
+# print(teams_df.head())
+# print(players_df.head())
+gamelog = playergamelog.PlayerGameLog(player_id=Lebron_id, season=2023)
+gamelog_data = gamelog.get_data_frames()
+vs_warriors = gamelog_data[0][(gamelog_data[0]['MATCHUP'] == 'LAL vs. GSW') | (gamelog_data[0]['MATCHUP'] == 'LAL @ GSW')]
+print(vs_warriors)
+team_log = teamgamelog.TeamGameLog(team_id=1610612744)
+team_log_data = team_log.get_data_frames()[0]
+# Filter the last 5 games
+team_last_5_games = team_log_data.head(5)
+print(team_last_5_games)
+Lebron_id = 2544
+gamelog = playergamelog.PlayerGameLog(player_id=Lebron_id, season='2023')
+lebron_gamelog = gamelog.get_data_frames()[0]
+print(lebron_gamelog.head())
+
+merged_data = pd.merge(lebron_gamelog, team_log_data, on='Game_ID', suffixes=('_LeBron', '_Warriors'))
+print(merged_data.columns)
+# Example: select relevant features
+features = ['PTS_LeBron', 'AST_LeBron', 'REB_LeBron', 'PTS_Warriors']
+X = merged_data[features]
+y = merged_data['PTS_LeBron']  # Predict LeBron's points
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a Random Forest regressor
+rf_model = RandomForestRegressor()
+rf_model.fit(X_train, y_train)
+
+latest_lebron_stats = lebron_gamelog.iloc[-1][['PTS', 'AST', 'REB']]
+
+# Extract the latest game's stats for the Warriors
+latest_warriors_stats = team_last_5_games.iloc[-1][['PTS']]
+
+# Combine LeBron's and the Warriors' stats into a single DataFrame
+prediction_data = pd.concat([latest_lebron_stats, latest_warriors_stats])
+
+# Reshape the data to match the format used during training
+X_pred = prediction_data.values.reshape(1, -1)
+
+# Make predictions using the trained model
+predicted_points = rf_model.predict(X_pred)
+
+# Print the predicted points
+print("Predicted points for LeBron's next game against the Warriors:", predicted_points[0])
+
+
+# # Evaluate the model
+# y_pred = rf_model.predict(X_test)
+# mse = mean_squared_error(y_test, y_pred)
+# print(f'pred: {type(y_pred)}')
+# print(f'Mean Squared Error: {mse}')
 
 @app.route('/teams')
 def get_teams():
@@ -116,6 +190,16 @@ def get_team_stats():
     team_stats = team_log.get_normalized_dict()
 
     return jsonify(team_stats)
+
+@app.route('/team_last_5_games/<team_id>')
+def get_team_last_5_games(team_id):
+    # Retrieve the last 5 games for the team using NBA API
+    team_log = teamgamelog.TeamGameLog(team_id=team_id)
+    team_log_data = team_log.get_data_frames()[0]
+    # Filter the last 5 games
+    last_5_games = team_log_data.head(5)
+    return jsonify(last_5_games.to_dict(orient='records'))
+
 
 @app.route('/team-roster/<team_abbreviation>')
 def get_team_roster(team_abbreviation):

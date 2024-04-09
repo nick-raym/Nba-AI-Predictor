@@ -19,6 +19,7 @@ flask-bcrypt = "*"
 python-dotenv = "*"
 nba-api = "*"
 pandas = "*"
+scikit-learn = "*"
 
 [dev-packages]
 

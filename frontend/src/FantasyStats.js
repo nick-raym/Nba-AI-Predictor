@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TeamSearch from './TeamSearch'; // Assuming TeamSearch is a component for searching teams
+import "./FantasyStats.css"
 
 const FantasyStatsPicker = () => {
     const [selectedOption, setSelectedOption] = useState('OVERALL');
@@ -22,6 +23,7 @@ const FantasyStatsPicker = () => {
                     OVERALL
                 </label>
             </div>
+
             <div>
                 <label>
                     <input
