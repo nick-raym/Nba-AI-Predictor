@@ -7,6 +7,7 @@ from flask_bcrypt import Bcrypt
 from sqlite3 import IntegrityError
 from sqlalchemy import exc 
 from models import db,Match,Player,Team,User,Comment
+import numpy as np
 import pandas as pd
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import teamgamelog, playergamelog,leaguegamefinder
@@ -19,7 +20,7 @@ from nba_api.stats.endpoints import commonteamroster
 from nba_api.stats.endpoints import TeamYearByYearStats
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score, mean_squared_error
 
 
 import json
@@ -74,6 +75,7 @@ lebron_gamelog = gamelog.get_data_frames()[0]
 print(lebron_gamelog.head())
 
 merged_data = pd.merge(lebron_gamelog, team_log_data, on='Game_ID', suffixes=('_LeBron', '_Warriors'))
+
 print(merged_data.columns)
 # Example: select relevant features
 features = ['PTS_LeBron', 'AST_LeBron', 'REB_LeBron', 'PTS_Warriors']
@@ -94,6 +96,14 @@ latest_warriors_stats = team_last_5_games.iloc[-1][['PTS']]
 
 # Combine LeBron's and the Warriors' stats into a single DataFrame
 prediction_data = pd.concat([latest_lebron_stats, latest_warriors_stats])
+print("---------------------------------------------")
+print(f"\n\n")
+print("---------------------------------------------")
+print(prediction_data)
+print(np.shape(prediction_data))
+print("---------------------------------------------")
+print(f"\n\n")
+print("---------------------------------------------")
 
 # Reshape the data to match the format used during training
 X_pred = prediction_data.values.reshape(1, -1)
@@ -102,7 +112,13 @@ X_pred = prediction_data.values.reshape(1, -1)
 predicted_points = rf_model.predict(X_pred)
 
 # Print the predicted points
-print("Predicted points for LeBron's next game against the Warriors:", predicted_points[0])
+# print("Predicted points for LeBron's next game against the Warriors:", predicted_points[0])
+
+# Check accuracy using regression metrics (R^2)
+print(f"\n\nTrue values: {[y_test[0]]}")
+print(f"\n\nPredicted values: {[predicted_points[0]]}")
+score = r2_score([y_test[0]], [predicted_points[0]])
+print("\n\nThe accuracy of our model is {}%".format(round(score, 2) * 100))
 
 
 # # Evaluate the model

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import "./PlayerPage.css";
 import Seasons from "./Seasons.js";
 import FantasyStatsPicker from "./FantasyStats.js";
+import Loading from "./Loading.js";
 
 export default function PlayerPage() {
     const { playerId } = useParams();
@@ -60,12 +61,15 @@ export default function PlayerPage() {
             </div>
             
         </div>
+        
         <div className="seasons">
                 {/* Pass start year as prop to Seasons component */}
                 {seasons.map((season, index) => (
                     <Seasons key={index} season={season} startDate={seasonNum + index} />
                 ))}
+                
         </div>
+        {!seasons.length>0?<Loading/>:null}
         </div>
     );
 }

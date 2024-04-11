@@ -6,19 +6,31 @@
 .navbar-nav {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding:5px 5px;
     display: flex;
+
 }
 
 .nav-item {
+    font-size: larger;
     margin-right: 10px;
 }
 
 .nav-link {
     color: #fff;
     text-decoration: none;
+    
 }
 
 .nav-link:hover {
-    text-decoration: underline;
+    text-decoration: underline; 
+    /* background-color: #333; */
+}
+
+.nav-image {
+    width: 30px; /* Adjust the width and height as needed */
+    height: 30px;
+    float: left;
+    margin-left: 0px;
+     /* Adjust margin as needed */
 }
