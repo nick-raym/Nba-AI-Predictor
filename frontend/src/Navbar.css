@@ -12,8 +12,11 @@
 }
 
 .nav-item {
+    margin-top: 17px;
+    margin-left: 20px;
     font-size: larger;
     margin-right: 10px;
+    height: 24px;
 }
 
 .nav-link {
@@ -28,9 +31,10 @@
 }
 
 .nav-image {
-    width: 30px; /* Adjust the width and height as needed */
-    height: 30px;
+    width: 90px; /* Adjust the width and height as needed */
+    height: 70px;
     float: left;
-    margin-left: 0px;
+    
+    /* margin-left: 10px; */
      /* Adjust margin as needed */
 }

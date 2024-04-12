@@ -11,6 +11,8 @@
     padding: 8px;
     margin-bottom: 20px;
     text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Adjust the values to customize the shadow */
+    border-radius: 5px; /* Add border-radius for a rounded corner effect */
 }
 
 .search-results {

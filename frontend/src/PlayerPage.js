@@ -57,12 +57,12 @@ export default function PlayerPage() {
                 {/* Add more relevant player information here */}
             </div>
             <div className="fantasy-stats-container">
-                <FantasyStatsPicker />
+                <FantasyStatsPicker player_Id={playerId}/>
             </div>
             
         </div>
         
-        <div className="seasons">
+        <div className="seasons" style={{marginBottom:"50px"}}>
                 {/* Pass start year as prop to Seasons component */}
                 {seasons.map((season, index) => (
                     <Seasons key={index} season={season} startDate={seasonNum + index} />
