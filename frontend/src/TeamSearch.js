@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import './Search.css';
 import { Link } from "react-router-dom";
 
-export default function TeamSearch({ page = true, predictionTeam, setPredictionTeam }) {
+export default function TeamSearch({ page = true, predictionTeam, setPredictionTeam, num = 10 }) {
     const [teams, setTeams] = useState([]);
     const [teamSearch, setTeamSearch] = useState('');
     const [filteredTeams, setFilteredTeams] = useState([]);
@@ -12,7 +12,7 @@ export default function TeamSearch({ page = true, predictionTeam, setPredictionT
             .then(response => response.json())
             .then(data => {
                 setTeams(data);
-                setFilteredTeams(data.slice(0, 10));
+                setFilteredTeams(data.slice(0, num));
             })
             .catch(error => {
                 console.error('Error fetching teams:', error);
@@ -25,7 +25,7 @@ export default function TeamSearch({ page = true, predictionTeam, setPredictionT
         setTeamSearch(searchTerm);
 
         const filtered = teams.filter(team => team.full_name.toLowerCase().includes(searchTerm));
-        setFilteredTeams(filtered.slice(0, 10));
+        setFilteredTeams(filtered.slice(0, num));
     }
 
     const handleTeamPrediction = (team) => {

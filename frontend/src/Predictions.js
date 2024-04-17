@@ -31,7 +31,7 @@ export default function Predictions() {
     return (
         <div>
             <h1>Predictions Page</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} style={{textAlign:'center'}}>
                 <label htmlFor="prediction">Select a Prediction:</label>
                 <select id="prediction" value={selectedPrediction} onChange={handlePredictionChange}>
                     <option value="">Select</option>

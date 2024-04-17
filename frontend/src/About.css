@@ -1,0 +1,25 @@
+.about-section {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-top: 70px;
+}
+
+.about-section h2 {
+    margin-bottom: 10px;
+}
+
+.about-section p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.about-section a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.about-section a:hover {
+    text-decoration: underline;
+}

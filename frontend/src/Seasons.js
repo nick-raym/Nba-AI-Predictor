@@ -2,7 +2,7 @@ import React from "react";
 import "./Seasons.css";
 
 export default function Seasons({ season, startDate }) {
-    console.log(season);
+    // console.log(season);
 
     const calculateAverages = () => {
         if (!season || season.length === 0) {

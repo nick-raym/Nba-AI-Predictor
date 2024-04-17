@@ -38,7 +38,7 @@ export default function TeamPage() {
         <div className="team-container">
             <h1>{teamAbbreviation}</h1>
             <div className="roster">
-                <h2>Roster</h2>
+                <h2>&nbsp;Roster</h2>
                 <ul>
                     {roster.map(player => (
                         <Link to={`/player-page/${player.PLAYER_ID}`} key={player.PLAYER_ID}>
@@ -52,7 +52,7 @@ export default function TeamPage() {
                     ))}
                 </ul>
             </div>
-            <div className="yearly-stats">
+            <div className="yearly-stats" style={{float:'right'}}>
                 <h2>23'-24' Stats</h2>
                 <ul>
                     {Array.isArray(YBYStats) ? (

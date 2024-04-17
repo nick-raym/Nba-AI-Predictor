@@ -1,0 +1,17 @@
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.input-grid label {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-pred{
+    position: absolute;
+    margin-left: 40%;
+    margin-top: 12%;
+    width: 250px;
+}

@@ -5,9 +5,14 @@ import "./FantasyStats.css"
 const FantasyStatsPicker = ({ player_Id }) => {
     const [selectedOption, setSelectedOption] = useState('OVERALL');
     const [fantasyStats, setFantasyStats] = useState([])
+    const [predictionTeam, setPredictionTeam] = useState([])
+    const [vsOpps, setVsOpps] = useState([])
+    const [vsTeam,setVsTeam] = useState([])
+
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
+        // setPredictionTeam([])
     };
 
     useEffect(() => {
@@ -15,9 +20,25 @@ const FantasyStatsPicker = ({ player_Id }) => {
             .then(response => response.json())
             .then(data => {
                 setFantasyStats(data)
-                console.log(data)
+                setVsOpps(data['Opponent'])
+                console.log(data['Opponent'])
+                // console.log(data)
             })
     }, [player_Id])
+
+// console.log(vsOpps)
+
+    useEffect(() => {
+        for (const opponent of vsOpps) { 
+            if (opponent.GROUP_VALUE === predictionTeam.full_name) {
+                setVsTeam(opponent);
+                break;
+            }
+        }
+    }, [predictionTeam]);
+
+
+
 
     return (
         <div>
@@ -44,7 +65,32 @@ const FantasyStatsPicker = ({ player_Id }) => {
                     />
                     VS OPPONENT
                 </label>
-                {selectedOption === 'VS OPPONENT' && <TeamSearch page={false} />}
+                {selectedOption === 'VS OPPONENT' && !predictionTeam.full_name &&<TeamSearch page={false} setPredictionTeam={setPredictionTeam} num={5}/>}
+                {predictionTeam.full_name && selectedOption === 'VS OPPONENT'?<div className='overall-stats'>
+                                <p style={{ marginLeft: "80px", marginTop: "20px", marginBottom: "25px" }}>Stats From: {fantasyStats['Overall'][0].GROUP_VALUE} Season</p>
+                                <p style={{ marginLeft: "90px", marginTop: "20px", marginBottom: "25px" }}>Stats Vs {vsTeam.GROUP_VALUE}</p>
+
+                                <div style={{ display: "flex", justifyContent: "space-between",padding:"0px 25px" }}>
+                                    <div>
+                                        <p>PTS: {Math.round(vsTeam.PTS)}</p>
+                                        <p>AST: {Math.round(vsTeam.AST)}</p>
+                                        <p>REB: {Math.round(vsTeam.REB)}</p>
+                                        <p>BLKS: {Math.round(vsTeam.BLK)}</p>
+                                        <p>STL: {Math.round(vsTeam.STL)}</p>
+                                        <p>GP: {Math.round(vsTeam.GP)}</p>
+                                        <p>TOV: {Math.round(vsTeam.TOV)}</p>
+                                    </div>
+                                    <div className='side-items'>
+                                        <p>WINS: {Math.round(vsTeam.W)}</p>
+                                        <p>LOSSES: {Math.round(vsTeam.L)}</p>
+                                        <p>+/-: {Math.round(vsTeam.PLUS_MINUS)}</p>
+                                        <p>FG %: {(vsTeam.FG_PCT * 100).toFixed(2)}</p>
+                                        <p>FG3 %: {(vsTeam.FG3_PCT * 100).toFixed(2)}</p>
+                                        <p>MIN: {(vsTeam.MIN *100 ).toFixed(2)}</p>
+                                        <p>FT %: {(vsTeam.FT_PCT * 100).toFixed(2)}</p>
+                                    </div>
+                                </div>
+                            </div>:null}
                 {selectedOption === 'OVERALL' &&
                     <div>
                         {typeof fantasyStats['Overall'] === 'object' && Object.keys(fantasyStats['Overall']).length > 0 ?

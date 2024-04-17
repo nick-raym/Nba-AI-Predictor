@@ -10,6 +10,9 @@ import Search from './Search';
 import PlayerPage from './PlayerPage';
 import TeamSearch from './TeamSearch';
 import TeamPage from './TeamPage';
+import Model from './Model';
+import PredictPoints from './PredictPoints';
+import About from './About';
 
 
 const router = createBrowserRouter([
@@ -45,6 +48,14 @@ const router = createBrowserRouter([
       {
         path: "/team-page/:teamAbbreviation/:teamId",
         element: <TeamPage />
+      },
+      {
+        path: "/predict-points",
+        element: <PredictPoints />
+      },
+      {
+      path: "/about",
+      element: <About />
       }
       
     ]

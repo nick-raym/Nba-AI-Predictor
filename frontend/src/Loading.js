@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { gsap } from 'gsap';
 import "./Loading.css"
+import bball from "./Assets/bball.jpeg" 
 
 const Loading = () => {
     
 
     return (
-        <div class="load">
+        <div className="load">
         <hr/><hr/><hr/><hr/>
         </div>
     );
