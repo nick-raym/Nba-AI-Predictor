@@ -1,17 +1,66 @@
+.predict-points {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.predict-points h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
 .input-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* Adjusted to 2 columns */
+    align-items: center;
+    justify-content: center;
     gap: 10px;
 }
 
 .input-grid label {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-.btn-pred{
-    position: absolute;
-    margin-left: 40%;
-    margin-top: 12%;
-    width: 250px;
+.input-grid input {
+    text-align: center;
+    width: 100%;
+    padding: 8px 2px;
+    font-size: 16px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-pred {
+    margin-top: 20px;
+    width: 290px;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-pred:hover {
+    background-color: #0056b3;
+}
+
+.predicted-points {
+    font-size: 24px;
+    margin-top: 30px;
+    color: #333;
+}
+
+.real-points{
+    font-size: 30px;
+    margin-top: 0px;
+    color: #333;
 }

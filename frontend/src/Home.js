@@ -6,7 +6,7 @@ export default function Home() {
     return (
         <div className="container">
             <header className="header">
-                <h1>Welcome to our Home Page</h1>
+                <h1>Welcome to Nba Predictions</h1>
             </header>
 
             <div className="main-content">
@@ -17,7 +17,7 @@ export default function Home() {
 
                 <section className="section">
                     <h2>Our Services</h2>
-                    <Link to="/predict-points">PTS prediction W/ ML</Link>
+                    <Link to="/predict-points">PTS Prediction</Link>
                 </section>
 
                 <section className="section">

@@ -54,6 +54,10 @@ const router = createBrowserRouter([
         element: <PredictPoints />
       },
       {
+        path: "/predict-points/:playerId/:playerName",
+        element: <PredictPoints />
+      },
+      {
       path: "/about",
       element: <About />
       }

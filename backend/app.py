@@ -197,6 +197,29 @@ def get_team_games(team_abbreviation):
     games_json = games.to_json(orient="records")
     return jsonify(games_json)
 
+features = [
+        "AST",
+        "REB",
+        "PLUS_MINUS",
+        "MIN",
+        "TOV",
+        "PF",
+        "FTA",
+    ]  
+target = ["PTS"]
+# gamelog_dame = playergamelog.PlayerGameLog(player_id=Dame_id, season=2023)
+# gamelog_data_dame = gamelog_dame.get_json()[0]
+# latest_dame_stats = gamelog_data_dame.iloc[-10][features].values
+# latest_dame_points = gamelog_data_dame.iloc[-10][target].values
+@app.route("/last-game-stats/<player_id>")
+def get_last_game_stats(player_id):
+    gamelog_player = playergamelog.PlayerGameLog(player_id=player_id, season=2023)
+    gamelog_data = gamelog_player.get_data_frames()[0]
+    latest_stats = gamelog_data.iloc[-1][features].values.astype(int).tolist()  # Convert to regular integers and then to list
+    latest_pts = gamelog_data.iloc[-1][target].values.astype(int).tolist()  # Convert to regular integers and then to list
+    
+    return jsonify({'features': latest_stats, 'pts': latest_pts[0]})
+
 
 # 203507/GSW
 @app.route("/player-point-averages/<player_id>/<team_abbreviation>")

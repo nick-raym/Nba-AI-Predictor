@@ -84,10 +84,10 @@ const FantasyStatsPicker = ({ player_Id }) => {
                                         <p>WINS: {Math.round(vsTeam.W)}</p>
                                         <p>LOSSES: {Math.round(vsTeam.L)}</p>
                                         <p>+/-: {Math.round(vsTeam.PLUS_MINUS)}</p>
-                                        <p>FG %: {(vsTeam.FG_PCT * 100).toFixed(2)}</p>
-                                        <p>FG3 %: {(vsTeam.FG3_PCT * 100).toFixed(2)}</p>
-                                        <p>MIN: {(vsTeam.MIN *100 ).toFixed(2)}</p>
-                                        <p>FT %: {(vsTeam.FT_PCT * 100).toFixed(2)}</p>
+                                        <p>FG %: {Math.round(vsTeam.FG_PCT * 100).toFixed(2)}</p>
+                                        <p>FG3 %: {Math.round(vsTeam.FG3_PCT * 100).toFixed(2)}</p>
+                                        <p>MIN: {Math.round(vsTeam.MIN).toFixed(2)}</p>
+                                        <p>FT %: {Math.round(vsTeam.FT_PCT * 100).toFixed(2)}</p>
                                     </div>
                                 </div>
                             </div>:null}

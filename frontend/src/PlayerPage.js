@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, redirect, useNavigate, useParams } from "react-router-dom";
 import "./PlayerPage.css";
 import Seasons from "./Seasons.js";
 import FantasyStatsPicker from "./FantasyStats.js";
@@ -40,6 +40,10 @@ export default function PlayerPage() {
         }
     }, [player, playerId]);
 
+    const handleImportStats = (()=>{
+        
+    })
+
     return (
         <div>
         <div className="player-container">
@@ -55,6 +59,7 @@ export default function PlayerPage() {
                 <p><strong>Seasons of Experience:</strong> {player.SEASON_EXP}</p>
                 <p><strong>Last Affiliation:</strong> {player.LAST_AFFILIATION}</p>
                 {/* Add more relevant player information here */}
+                <Link to={`/predict-points/${playerId}/${player.DISPLAY_FIRST_LAST}`}><button onClick={handleImportStats} style={{marginTop:"50px"}}>Import Last Game Stats</button></Link>
             </div>
             <div className="fantasy-stats-container">
                 <FantasyStatsPicker player_Id={playerId}/>

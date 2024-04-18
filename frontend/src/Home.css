@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #fff;
+    
     /* White background for the body */
     color: #333;
     /* Dark gray text */
@@ -21,10 +21,8 @@ body {
 .header,
 .footer {
     padding: 20px;
-    background-color: #d73c21;
-    /* Subtle red background */
-    color: #fff;
-    /* White text */
+    background-color: #333;
+    color: #ffffff;
 }
 
 .main-content {
@@ -37,8 +35,7 @@ body {
 
 .section h2 {
     margin-bottom: 20px;
-    color: #d73c21;
-    /* Subtle red text */
+    
 }
 
 .section a,

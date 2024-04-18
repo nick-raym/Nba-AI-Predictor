@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PredictPoints.css';
+import { useParams } from 'react-router-dom';
 
 const PredictPoints = () => {
-    const [formData, setFormData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]); // Initialize with zeros
-    const [predPoints, setPredPoints] = useState(0)
+    const { playerId=null,playerName=null } = useParams();
+    console.log(playerId,playerName)
+    const [formData, setFormData] = useState([0, 0, 0, 0, 0, 0, 0]); // Initialize with zeros
+    const [predPoints, setPredPoints] = useState(0);
+    const [realPoints, setRealPoints] = useState([])
 
     const handleChange = (e, index) => {
         const newValue = parseFloat(e.target.value); // Parse input value to float
@@ -24,30 +28,41 @@ const PredictPoints = () => {
             });
             const data = await response.json();
             console.log('Predicted Points:', data.predicted_points);
-            setPredPoints(data.predicted_points)
+            setPredPoints(data.predicted_points);
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
+    useEffect(() => {
+        if(playerId && playerName){
+            fetch(`http://localhost:5555/last-game-stats/${playerId}`)
+                .then(response => response.json())
+                .then(data => {
+                    setFormData(data['features']);
+                    setRealPoints(data['pts'])
+                });}
+    }, [playerId]);
+
     return (
         <div className="predict-points">
-            <h2 style={{textAlign:'center',marginRight:'30px'}}>Predict Points</h2>
+            <h2>Predict Points</h2>
             <form onSubmit={handleSubmit} className="input-grid">
-                {Array.from({ length: 9 }, (_, i) => (
+                {Array.from({ length: 7 }, (_, i) => (
                     <label key={i}>
-                        {['Assists', 'Rebounds', 'Plus/Minus', 'Minutes', 'Turnovers', 'Personal Fouls', 'Field Goal %', 'Free Throw Attempts', 'Three-Point %'][i]}:
+                        {['Assists', 'Rebounds', 'Plus/Minus', 'Minutes', 'Turnovers', 'Personal Fouls', 'Free Throw Attempts'][i]}:
                         <input
                             type="number"
-                            step={i === 6 || i === 8 ? '0.01' : '1'}
+                            step={i === 6 ? '0.01' : '1'}
                             value={formData[i]} // Access the value at index i
                             onChange={(e) => handleChange(e, i)} // Pass the index along with the event
                         />
                     </label>
                 ))}
-            <button type="submit" className='btn-pred'>Predict</button>
+                <button type="submit" className='btn-pred'>Predict</button>
             </form>
-            {predPoints ? <h1 style={{textAlign:'center', marginTop:'100px', marginRight:'30px'}}>Predicted Points: {predPoints}</h1> : null}
+            {predPoints ? <div className="predicted-points">Predicted Points: {predPoints}</div> : null}
+            {realPoints && playerName && playerId? <h1 classname='real-points'>Last game pts {playerName}: {realPoints} PTS</h1>:null}
         </div>
     );
 };
